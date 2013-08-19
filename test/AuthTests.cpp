@@ -19,4 +19,23 @@ protected:
  TEST_F(AuthTestSuite, TestServerURLSetupCorrectly){
      ASSERT_TRUE(_authLayer != nullptr);
      EXPECT_EQ(_authLayer->getServerURL(), SERVER_URL);
- };
+ }
+
+ TEST_F(AuthTestSuite, TestServerDenieWithAllInvalidCredentionals){
+     _authLayer->setLogin(INVALID_LOGIN);
+     _authLayer->setPassword(INVALID_PASSWORD);
+     EXPECT_CALL(_authLayer, onAuthorizationFailed());
+ }
+
+ TEST_F(AuthTestSuite, TestServerDenieWithInvalidPassword){
+     _authLayer->setLogin(VALID_LOGIN);
+     _authLayer->setPassword(INVALID_PASSWORD);
+     EXPECT_CALL(_authLayer, onAuthorizationFailed());
+ }
+
+ TEST_F(AuthTestSuite, TestServerAcceptWithValidCredentions){
+     _authLayer->setLogin(VALID_LOGIN);
+     _authLayer->setPassword(VALID_PASSWORD);
+     EXPECT_CALL(_authLayer, onAuthorizationSuccessful());
+     EXPECT_TRUE(_authLayer, isAuthorized());
+ }
