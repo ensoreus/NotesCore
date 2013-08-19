@@ -2,4 +2,5 @@
 
 AuthLayer::AuthLayer(const string& url)
 {
+    _baseURL = url;
 }
