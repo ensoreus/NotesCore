@@ -1,4 +1,5 @@
 #include "AuthLayer.hpp"
+#include "configuration.hpp"
 
 AuthLayer::AuthLayer(const string& url)
 {
@@ -7,7 +8,13 @@ AuthLayer::AuthLayer(const string& url)
 }
 
 void AuthLayer::authorize(){
-    //if (_login == VALID_LOGIN && _password == )
+    _isAuthorized =  (_login == VALID_LOGIN && _password == VALID_PASSWORD);
+    if ( _isAuthorized && _delegate != nullptr )
+    {
+         _delegate->onAuthorizationSuccessful();
+    }else{
+        _delegate->onAuthorizationFailed();
+    }
 }
 
 

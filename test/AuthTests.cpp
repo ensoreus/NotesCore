@@ -29,29 +29,29 @@ public:
      EXPECT_EQ(_authLayer->getServerURL(), SERVER_URL);
  }
 
- TEST_F(AuthTestSuite, TestServerDenieWithAllInvalidCredentionals){
+ TEST_F(AuthTestSuite, TestServerDenyWithAllInvalidCredentionals){
      using ::testing::Mock;
      MockAuthLayerDelegate *mockAuthLayerDelegate = new MockAuthLayerDelegate();
 
      _authLayer->setLogin(INVALID_LOGIN);
      _authLayer->setPassword(INVALID_PASSWORD);
      _authLayer->setDelegate(mockAuthLayerDelegate);
+      EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationFailed()).Times(1);
      _authLayer->authorize();
 
-     EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationFailed()).Times(1);
+
      Mock::VerifyAndClearExpectations(mockAuthLayerDelegate);
  }
 
- TEST_F(AuthTestSuite, TestServerDenieWithInvalidPassword){
+ TEST_F(AuthTestSuite, TestServerDenyWithInvalidPassword){
      using ::testing::Mock;
      MockAuthLayerDelegate *mockAuthLayerDelegate = new MockAuthLayerDelegate();
 
      _authLayer->setLogin(VALID_LOGIN);
      _authLayer->setPassword(INVALID_PASSWORD);
      _authLayer->setDelegate(mockAuthLayerDelegate);
-     _authLayer->authorize();
-
      EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationFailed()).Times(1);
+     _authLayer->authorize();
      Mock::VerifyAndClearExpectations(mockAuthLayerDelegate);
  }
 
@@ -62,9 +62,8 @@ public:
      _authLayer->setLogin(VALID_LOGIN);
      _authLayer->setPassword(VALID_PASSWORD);
      _authLayer->setDelegate(mockAuthLayerDelegate);
-     _authLayer->authorize();
+     EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationSuccessful()).Times(1);
 
-     EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationFailed()).Times(1);
-     EXPECT_TRUE(_authLayer->isAuthorized());
+     _authLayer->authorize();
      Mock::VerifyAndClearExpectations(mockAuthLayerDelegate);
  }
