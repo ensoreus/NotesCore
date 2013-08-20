@@ -6,10 +6,11 @@ aux_source_directory(src SRC_LIST)
 
 add_definitions(-Wall -ansi -Wno-deprecated -pthread -std=c++11)
 
-
 set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
 set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
 set(LINK_DIRECTORIES ${EXT_PROJECTS_DIR})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
+
 add_library(${PROJECT_NAME} STATIC ${SRC_LIST} )
 
 #-------------------
@@ -17,6 +18,7 @@ add_library(${PROJECT_NAME} STATIC ${SRC_LIST} )
 #-------------------
 
 enable_testing()
+set(GTEST_USE_OWN_TR1_TUPLE 1)
 set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
 include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
 link_directories(${EXT_PROJECTS_DIR})
