@@ -39,8 +39,8 @@ public:
       EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationFailed()).Times(1);
      _authLayer->authorize();
 
-
      Mock::VerifyAndClearExpectations(mockAuthLayerDelegate);
+     delete mockAuthLayerDelegate;
  }
 
  TEST_F(AuthTestSuite, TestServerDenyWithInvalidPassword){
@@ -53,6 +53,7 @@ public:
      EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationFailed()).Times(1);
      _authLayer->authorize();
      Mock::VerifyAndClearExpectations(mockAuthLayerDelegate);
+     delete mockAuthLayerDelegate;
  }
 
  TEST_F(AuthTestSuite, TestServerAcceptWithValidCredentions){
@@ -66,4 +67,19 @@ public:
 
      _authLayer->authorize();
      Mock::VerifyAndClearExpectations(mockAuthLayerDelegate);
+     delete mockAuthLayerDelegate;
+ }
+
+ TEST_F(AuthTestSuite, TestWhetherAuthPassesWitoutDelegateSetup){
+     _authLayer->setLogin(VALID_LOGIN);
+     _authLayer->setPassword(VALID_PASSWORD);
+     _authLayer->setDelegate(nullptr);
+     EXPECT_NO_FATAL_FAILURE(_authLayer->authorize());
+ }
+
+ TEST_F(AuthTestSuite, TestIsAuthorizedIsSetupOnSuccess){
+     _authLayer->setLogin(VALID_LOGIN);
+     _authLayer->setPassword(VALID_PASSWORD);
+     _authLayer->authorize();
+     EXPECT_TRUE(_authLayer->isAuthorized());
  }
