@@ -31,7 +31,6 @@ TEST_F(AuthTestSuite, TestServerURLSetupCorrectly){
     EXPECT_EQ(_authLayer->getServerURL(), SERVER_URL);
 }
 
-
 TEST_F(AuthTestSuite, TestServerDenyWithAllInvalidCredentionals){
     using ::testing::Mock;
     MockAuthLayerDelegate *mockAuthLayerDelegate = new MockAuthLayerDelegate();

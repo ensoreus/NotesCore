@@ -41,7 +41,6 @@ TEST_F(NoteEntityTestSuite, TestNoteHaveBody){
 
 TEST_F(NoteEntityTestSuite, TestNoteHaveDate){
     std::time_t t = time(NULL);
-    struct tm* dateTime = gmtime(&t);
     _note->setTimestamp(t);
     ASSERT_EQ(_note->getTimestamp(), t);
 }
@@ -54,6 +53,10 @@ TEST_F(NoteEntityTestSuite, TestNoteIsActive){
 TEST_F(NoteEntityTestSuite, TestNoteIsInactive){
     _note->setActive(false);
     ASSERT_TRUE(!_note->isActive());
+}
+
+TEST_F(NoteEntityTestSuite, TestNotePersistant){
+
 }
 
 
