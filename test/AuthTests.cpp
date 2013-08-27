@@ -1,6 +1,4 @@
 #include <iostream>
-#include <thread>
-#include <chrono>
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
@@ -29,25 +27,19 @@ public:
 };
 
 TEST_F(AuthTestSuite, TestServerURLSetupCorrectly){
-    ASSERT_TRUE(_authLayer != nullptr);
+    ASSERT_TRUE(_authLayer != NULL);
     EXPECT_EQ(_authLayer->getServerURL(), SERVER_URL);
-}
-
-void timeout(){
-    this_thread::sleep_for(chrono::seconds(2));
 }
 
 
 TEST_F(AuthTestSuite, TestServerDenyWithAllInvalidCredentionals){
     using ::testing::Mock;
     MockAuthLayerDelegate *mockAuthLayerDelegate = new MockAuthLayerDelegate();
-    thread timeoutThread(timeout);
     _authLayer->setLogin(INVALID_LOGIN);
     _authLayer->setPassword(INVALID_PASSWORD);
     _authLayer->setDelegate(mockAuthLayerDelegate);
     EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationFailed()).Times(1);
     _authLayer->authorize();
-    timeoutThread.join();
     Mock::VerifyAndClearExpectations(mockAuthLayerDelegate);
     delete mockAuthLayerDelegate;
 }
@@ -55,13 +47,11 @@ TEST_F(AuthTestSuite, TestServerDenyWithAllInvalidCredentionals){
 TEST_F(AuthTestSuite, TestServerDenyWithInvalidPassword){
     using ::testing::Mock;
     MockAuthLayerDelegate *mockAuthLayerDelegate = new MockAuthLayerDelegate();
-    thread timeoutThread(timeout);
     _authLayer->setLogin(VALID_LOGIN);
     _authLayer->setPassword(INVALID_PASSWORD);
     _authLayer->setDelegate(mockAuthLayerDelegate);
     EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationFailed()).Times(1);
     _authLayer->authorize();
-    timeoutThread.join();
     Mock::VerifyAndClearExpectations(mockAuthLayerDelegate);
     delete mockAuthLayerDelegate;
 }
@@ -69,14 +59,12 @@ TEST_F(AuthTestSuite, TestServerDenyWithInvalidPassword){
 TEST_F(AuthTestSuite, TestServerAcceptWithValidCredentions){
     using ::testing::Mock;
     MockAuthLayerDelegate *mockAuthLayerDelegate = new MockAuthLayerDelegate();
-    thread timeoutThread(timeout);
     _authLayer->setLogin(VALID_LOGIN);
     _authLayer->setPassword(VALID_PASSWORD);
     _authLayer->setDelegate(mockAuthLayerDelegate);
     EXPECT_CALL(*mockAuthLayerDelegate, onAuthorizationSuccessful()).Times(1);
 
     _authLayer->authorize();
-    timeoutThread.join();
     Mock::VerifyAndClearExpectations(mockAuthLayerDelegate);
     delete mockAuthLayerDelegate;
 }
@@ -84,7 +72,7 @@ TEST_F(AuthTestSuite, TestServerAcceptWithValidCredentions){
 TEST_F(AuthTestSuite, TestWhetherAuthPassesWitoutDelegateSetup){
     _authLayer->setLogin(VALID_LOGIN);
     _authLayer->setPassword(VALID_PASSWORD);
-    _authLayer->setDelegate(nullptr);
+    _authLayer->setDelegate(NULL);
     EXPECT_NO_FATAL_FAILURE(_authLayer->authorize());
 }
 

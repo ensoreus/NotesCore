@@ -15,7 +15,7 @@ public:
     virtual void authorize();
     virtual bool isAuthorized(){return _isAuthorized;}
     virtual void setDelegate(IAuthLayerDelegate* delegate){_delegate = delegate;}
-    virtual ~AuthLayer(){_delegate = nullptr;}
+    virtual ~AuthLayer(){_delegate = NULL;}
 protected:
     AuthLayer(){}
 private:
