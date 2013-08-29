@@ -18,10 +18,10 @@ add_library(${PROJECT_NAME} STATIC ${SRC_LIST})
 #-------------------
 
 enable_testing()
-set(GTEST_USE_OWN_TR1_TUPLE 1)
+#set(GTEST_USE_OWN_TR1_TUPLE 1)
 set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
 include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
-add_definitions(-Wall -ansi -Wno-deprecated -pthread )
+add_definitions(-Wall -ansi -Wno-deprecated -pthread -static)
 file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 
 find_library(ODB_LIB odb ${EXT_PROJECTS_DIR})
