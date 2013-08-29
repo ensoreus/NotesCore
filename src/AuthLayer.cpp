@@ -4,12 +4,12 @@
 AuthLayer::AuthLayer(const string& url)
 {
     _baseURL = url;
-    _delegate = nullptr;
+    _delegate = NULL;
 }
 
 void AuthLayer::authorize(){
     _isAuthorized =  (_login == VALID_LOGIN && _password == VALID_PASSWORD);
-    if ( _delegate == nullptr) return;
+    if ( _delegate == NULL) return;
     if ( _isAuthorized )
     {
          _delegate->onAuthorizationSuccessful();
