@@ -108,9 +108,6 @@ TEST_F(NoteEntityTestSuite, TestNotePersistant){
         cerr << e.what () << endl;
         return ;
     }
-
-    //erase from storage
-
 }
 
 
