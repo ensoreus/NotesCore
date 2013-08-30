@@ -30,8 +30,14 @@ time_t NotesSourceImpl::AddNote(const char* noteBody)
     return theTime;
 }
 
-const char* NotesSourceImpl::FindByTime(time_t)
+const char* NotesSourceImpl::FindByTime(time_t t)
 {
-
+    session s;
+    transaction tr(_db->begin());
+    odb::result<NoteEntity> searchResults(_db->query<NoteEntity> ( odb::query<NoteEntity>::timestamp == t));
+    if (searchResults.empty())
+        return NULL;
+    NoteEntity entity = *searchResults.begin();
+    tr.commit();
+    return entity.getBody().c_str();
 }
-//auto_ptr<NoteEntity> note(new NoteEntity(body));

@@ -22,5 +22,5 @@ time_t NotesSource::AddNote(const char *body){
 }
 
 const char* NotesSource::FindByTime(time_t t){
-    return "1";
+    return _impl->FindByTime(t);
 }
