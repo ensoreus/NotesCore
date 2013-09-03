@@ -10,8 +10,11 @@ using namespace std;
 class NoteEntity
 {
 public:
-    NoteEntity(){}
-    NoteEntity(string body):_body(body),_timestamp(time(0)),_active(true){}
+    NoteEntity():_active(true),_timestamp(time(0)),_body(""){}
+    NoteEntity(const char* body):_active(true),_timestamp(time(0)),_body(body){}
+    NoteEntity(const string& body):_active(true),_timestamp(time(0)),_body(body){}
+    NoteEntity(const NoteEntity& note):_active(note._active),_timestamp(note._timestamp), _body(note._body){}
+    NoteEntity(NoteEntity &note): _active(note._active), _timestamp(note._timestamp),_body(note._body){}
     virtual void setBody(string body){_body = body;}
     virtual string getBody() const {return _body;}
     virtual bool isActive() const {return _active;}
@@ -19,7 +22,8 @@ public:
     virtual void setTimestamp(time_t timestamp){_timestamp = timestamp;}
     virtual time_t getTimestamp()const {return _timestamp;}
     virtual long getID() const {return id_;}
-private:
+    virtual ~NoteEntity(){}
+protected:
     friend class odb::access;
 #pragma db id auto type("INTEGER")
     unsigned long id_;

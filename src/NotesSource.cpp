@@ -12,15 +12,24 @@ NotesSource* NotesSource::book()
    return source;
 }
 
+NotesSource::NotesSource(INoteSource* implementation)
+{
+    _impl.reset( implementation);
+}
+
 NotesSource::NotesSource()
 {
     _impl = auto_ptr<INoteSource>(new NotesSourceImpl("notesource.db"));
 }
 
-time_t NotesSource::AddNote(const char *body){
+NoteEntity* NotesSource::AddNote(const char *body)
+{
     return _impl->AddNote(body);
 }
 
-const char* NotesSource::FindByTime(time_t t){
+NoteEntity* NotesSource::FindByTime(time_t t)
+{
     return _impl->FindByTime(t);
 }
+
+

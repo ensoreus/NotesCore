@@ -17,27 +17,23 @@ NotesSourceImpl::NotesSourceImpl(const char* dbfilename)
     c->execute ("PRAGMA foreign_keys=ON");
 }
 
-time_t NotesSourceImpl::AddNote(const char* noteBody)
+NoteEntity* NotesSourceImpl::AddNote(const char* noteBody)
 {
     session s();
     transaction t(_db->begin());
     NoteEntity* note = new NoteEntity(noteBody);
-    _db->persist(note);
-
-    time_t theTime = note->getTimestamp();
-    t.commit();
-    delete note;
-    return theTime;
+    _db->persist(*note);
+    return note;
 }
 
-const char* NotesSourceImpl::FindByTime(time_t t)
+NoteEntity* NotesSourceImpl::FindByTime(time_t t)
 {
     session s;
     transaction tr(_db->begin());
     odb::result<NoteEntity> searchResults(_db->query<NoteEntity> ( odb::query<NoteEntity>::timestamp == t));
     if (searchResults.empty())
         return NULL;
-    NoteEntity entity = *searchResults.begin();
+    NoteEntity* entity = new NoteEntity(*searchResults.begin());
     tr.commit();
-    return entity.getBody().c_str();
+    return entity;
 }

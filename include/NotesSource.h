@@ -1,8 +1,8 @@
 #ifndef NOTESSOURCE_H
 #define NOTESSOURCE_H
 #include <time.h>
-#include <memory>
 #include "INoteSource.h"
+#include <memory>
 
 using namespace std;
 
@@ -11,8 +11,11 @@ class NotesSource
 public:
     static NotesSource* book();
     NotesSource();
-    time_t AddNote(const char* body);
-    const char *FindByTime(time_t t);
+    NotesSource(INoteSource* implementation);
+    NoteEntity* AddNote(const char* body);
+    NoteEntity* FindByTime(time_t t);
+    virtual ~NotesSource(){ }
+
 private:
     auto_ptr<INoteSource> _impl;
 };

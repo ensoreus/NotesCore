@@ -3,7 +3,7 @@ project(NotesCore)
 set(PROJECT_NAME_STR NotesCore)
 aux_source_directory(src SRC_LIST)
 
-add_definitions(-Wall -ansi -Wno-deprecated -pthread )
+add_definitions(-Wall -ansi -Wno-deprecated -pthread -Wunknown-pragmas)
 
 set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
 set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
@@ -21,7 +21,7 @@ enable_testing()
 #set(GTEST_USE_OWN_TR1_TUPLE 1)
 set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
 include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
-add_definitions(-Wall -ansi -Wno-deprecated -pthread -static)
+add_definitions(-Wall -ansi -Wno-deprecated -pthread -static -Wunknown-pragmas)
 file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 
 find_library(ODB_LIB odb ${EXT_PROJECTS_DIR})

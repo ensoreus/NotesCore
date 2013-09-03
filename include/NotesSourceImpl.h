@@ -17,10 +17,11 @@ using namespace odb;
 class NotesSourceImpl : public INoteSource
 {
 public:
+    NotesSourceImpl(){}
     NotesSourceImpl(const char* dbfilename);
-    time_t AddNote(const char*);
-    const char* FindByTime(time_t);
-private:
+    NoteEntity* AddNote(const char*);
+    NoteEntity* FindByTime(time_t);
+protected:
     auto_ptr<database> _db;
 };
 
