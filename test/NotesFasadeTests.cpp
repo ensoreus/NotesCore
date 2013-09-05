@@ -57,7 +57,11 @@ class MockDelegate : public INoteSourceDelegate
 public:
     MockDelegate(){}
     virtual ~MockDelegate(){}
-    MOCK_METHOD1( sourceDidFoundNotes, void( list<auto_ptr<NoteEntity> >) );
+    void sourceDidFoundNotes( auto_ptr<list<NoteEntity*> > notesFound)
+    {
+        testSourceDidFoundNotes(!notesFound->empty());
+    }
+    MOCK_METHOD1( testSourceDidFoundNotes, void(bool));
 };
 
 TEST_F(NotesFasadeTests, LazyCreationOfNotesSource){
@@ -103,13 +107,15 @@ TEST_F(NotesImplTests, NoteAdding){
 }
 
 TEST_F(NotesImplTests, AsynchronousSearchByBody){
-    auto_ptr<NoteEntity> addedNote(_notesSourceImpl->AddNote(testEntityBody) );
+  typedef auto_ptr< list<NoteEntity*> > ReturnValuesList;
+  
+    NoteEntity* addedNote(_notesSourceImpl->AddNote(testEntityBody) );
     MockDelegate* mock = new MockDelegate();
-    _notesSourceImpl->setDelegate( dynamic_cast<INoteSourceDelegate>(mock) );
-    list<auto_ptr<NoteEntity> > foundNotes;
-    foundNotes.push_back( addedNote );
-    EXPECT_CALL(mock, sourceDidFoundNotes(foundNotes));
+    _notesSourceImpl->setDelegate( static_cast< INoteSourceDelegate* >(mock) );
+    ReturnValuesList foundNotes(new list<NoteEntity*>() );
+    foundNotes->push_back( addedNote );
+    EXPECT_CALL(*mock, testSourceDidFoundNotes(true));
     _notesSourceImpl->FindByText(testEntityBody);
-
+    delete mock;
 }
 

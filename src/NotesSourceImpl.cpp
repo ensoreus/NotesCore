@@ -26,6 +26,23 @@ NoteEntity* NotesSourceImpl::AddNote(const char* noteBody)
     return note;
 }
 
+void NotesSourceImpl::FindByText(const char* text) const
+{
+    session s;
+    typedef odb::query<NoteEntity> query;
+    query qBody( query::body == text);
+    transaction tr(_db->begin());
+    odb::result<NoteEntity> searchResult(_db->query<NoteEntity>(qBody));
+
+    if (searchResult.empty())
+    {
+      _delegate->sourceDidFoundNotes(auto_ptr<list<NoteEntity *> >(new list<NoteEntity*>()));
+    }else{
+      //       _delegate->sourceDidFoundNotes();
+    }
+    tr.commit();
+}
+
 NoteEntity* NotesSourceImpl::FindByTime(time_t t)
 {
     session s;
