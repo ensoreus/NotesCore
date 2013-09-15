@@ -22,7 +22,7 @@ enable_testing()
 set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
 include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
 add_definitions(-Wall -ansi -Wno-deprecated -pthread -static -Wunknown-pragmas)
-file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
+file(GLOB TEST_SRC_FILES  ${PROJECT_SOURCE_DIR}/test/*.cpp)
 
 find_library(ODB_LIB odb ${EXT_PROJECTS_DIR})
 find_library(ODB_SQLITE_LIB odb-sqlite ${EXT_PROJECTS_DIR} )

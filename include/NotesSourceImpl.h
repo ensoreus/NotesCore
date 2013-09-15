@@ -18,7 +18,7 @@ using namespace odb;
 class NotesSourceImpl : public INoteSource
 {
 public:
-    NotesSourceImpl(){}
+  NotesSourceImpl(){}
     NotesSourceImpl(const char* dbfilename);
     NoteEntity* AddNote(const char*);
     NoteEntity* FindByTime(time_t);

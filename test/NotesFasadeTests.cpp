@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
+#include "NoteEntity.hpp"
 #include "NotesSource.h"
 #include "NotesSourceImpl.h"
 #include "INotesSourceDelegate.h"
@@ -25,17 +26,6 @@ protected:
     NotesSource* _notesSource;
 };
 
-class NotesImplTests : public ::testing::Test
-{
-protected:
-    virtual void SetUp(){
-        _notesSourceImpl = new NotesSourceImpl(testDBfile);
-    }
-    virtual void TearDown(){
-        delete _notesSourceImpl;
-    }
-    NotesSourceImpl* _notesSourceImpl;
-};
 
 class MockNotesSourceImpl : public NotesSourceImpl{
 public:
@@ -52,17 +42,6 @@ public:
     virtual ~MockNotesSourceImpl(){ }
 };
 
-class MockDelegate : public INoteSourceDelegate
-{
-public:
-    MockDelegate(){}
-    virtual ~MockDelegate(){}
-    void sourceDidFoundNotes( auto_ptr<list<NoteEntity*> > notesFound)
-    {
-        testSourceDidFoundNotes(!notesFound->empty());
-    }
-    MOCK_METHOD1( testSourceDidFoundNotes, void(bool));
-};
 
 TEST_F(NotesFasadeTests, LazyCreationOfNotesSource){
     ASSERT_TRUE(_notesSource != NULL);
@@ -93,29 +72,4 @@ TEST_F(NotesFasadeTests, SynchronousSearchByTimestamp){
     delete source;
 }
 
-TEST_F(NotesImplTests, LazyCreationOfNotesSourceImplementation)
-{
-    ASSERT_TRUE(_notesSourceImpl != NULL);
-}
-
-TEST_F(NotesImplTests, NoteAdding){
-    time_t t = time(0);
-    NoteEntity* entity = _notesSourceImpl->AddNote(testEntityBody);
-    EXPECT_EQ(entity->getTimestamp(), t);
-    EXPECT_STREQ(entity->getBody().c_str(), testEntityBody);
-    delete entity;
-}
-
-TEST_F(NotesImplTests, AsynchronousSearchByBody){
-  typedef auto_ptr< list<NoteEntity*> > ReturnValuesList;
-  
-    NoteEntity* addedNote(_notesSourceImpl->AddNote(testEntityBody) );
-    MockDelegate* mock = new MockDelegate();
-    _notesSourceImpl->setDelegate( static_cast< INoteSourceDelegate* >(mock) );
-    ReturnValuesList foundNotes(new list<NoteEntity*>() );
-    foundNotes->push_back( addedNote );
-    EXPECT_CALL(*mock, testSourceDidFoundNotes(true));
-    _notesSourceImpl->FindByText(testEntityBody);
-    delete mock;
-}
 

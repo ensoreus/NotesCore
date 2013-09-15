@@ -1,6 +1,7 @@
 #ifndef NOTEENTITY_HPP
 #define NOTEENTITY_HPP
 
+#include <iostream>
 #include <string>
 #include <odb/core.hxx>
 

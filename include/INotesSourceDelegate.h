@@ -8,6 +8,7 @@ using namespace std;
 
 class INoteSourceDelegate{
   public:
-    virtual void sourceDidFoundNotes( auto_ptr< list< NoteEntity* > >) = 0;
+    virtual void sourceDidFoundNotes( auto_ptr< list< NoteEntity > >) = 0;
+    virtual void sourceNotFoundNotes() = 0;
 };
 #endif // INOTESSOURCEDELEGATE_H

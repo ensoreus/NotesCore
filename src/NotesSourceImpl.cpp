@@ -1,6 +1,8 @@
 #include "NotesSourceImpl.h"
 #include "NoteEntity.hpp"
 #include "NoteEntity-odb.hxx"
+#include <iostream>
+#include <stdlib.h>
 #include <odb/schema-catalog.hxx>
 
 NotesSourceImpl::NotesSourceImpl(const char* dbfilename)
@@ -22,7 +24,8 @@ NoteEntity* NotesSourceImpl::AddNote(const char* noteBody)
     session s();
     transaction t(_db->begin());
     NoteEntity* note = new NoteEntity(noteBody);
-    _db->persist(*note);
+    _db->persist( *note );
+    t.commit();
     return note;
 }
 
@@ -33,12 +36,16 @@ void NotesSourceImpl::FindByText(const char* text) const
     query qBody( query::body == text);
     transaction tr(_db->begin());
     odb::result<NoteEntity> searchResult(_db->query<NoteEntity>(qBody));
-
-    if (searchResult.empty())
+    auto_ptr<list<NoteEntity> > foundNotesList(new list<NoteEntity>());
+    if (!searchResult.empty())
     {
-      _delegate->sourceDidFoundNotes(auto_ptr<list<NoteEntity *> >(new list<NoteEntity*>()));
+        for (odb::result<NoteEntity>::iterator i(searchResult.begin()); i != searchResult.end(); ++i)
+        {
+            foundNotesList->push_back(*i);
+        }
+        _delegate->sourceDidFoundNotes(foundNotesList);
     }else{
-      //       _delegate->sourceDidFoundNotes();
+        _delegate->sourceNotFoundNotes();    
     }
     tr.commit();
 }
