@@ -61,3 +61,8 @@ NoteEntity* NotesSourceImpl::FindByTime(time_t t)
     tr.commit();
     return entity;
 }
+
+void NotesSourceImpl::FindByTimeRange(time_t tBegin, time_t tEnd)
+{
+  
+}

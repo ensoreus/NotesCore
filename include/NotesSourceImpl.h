@@ -25,6 +25,7 @@ public:
     virtual void setDelegate( INoteSourceDelegate *delegate ) { _delegate.reset(delegate);}
     virtual INoteSourceDelegate* getDelegate() const { return _delegate.get();}
     virtual void FindByText(const char*) const;
+    virtual void FindByTimeRange(time_t tBegin, time_t tEnd);
 protected:
     auto_ptr<database> _db;
     auto_ptr<INoteSourceDelegate> _delegate;

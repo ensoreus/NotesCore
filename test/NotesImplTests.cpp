@@ -57,9 +57,30 @@ TEST_F(NotesImplTests, AsynchronousSearchByBody){
   NoteEntity* addedNote = _notesSourceImpl->AddNote(testEntityBody) ;
   MockDelegate* mock = new MockDelegate();
   _notesSourceImpl->setDelegate( static_cast< INoteSourceDelegate* >(mock) );
-  ReturnValuesList foundNotes( new list<NoteEntity>() );
-  foundNotes->push_back( *addedNote );
   EXPECT_CALL( *mock, testSourceDidFoundNotes(true) );
   _notesSourceImpl->FindByText(testEntityBody);
   delete addedNote;
+}
+
+TEST_F(NotesImplTests, FindNotesByTimeRange)
+{
+   typedef auto_ptr< list<NoteEntity> > ReturnValuesList;
+   NoteEntity* addedNote1 = _notesSourceImpl->AddNote(testEntityBody) ;
+   time_t t = time(0);
+
+   addedNote1->setTimestamp(t);
+   NoteEntity* addedNote2 = _notesSourceImpl->AddNote(testEntityBody) ; 
+   addedNote2->setTimestamp(t + 1200);
+   NoteEntity* addedNote3 = _notesSourceImpl->AddNote(testEntityBody) ;
+   addedNote3->setTimestamp(t + 1200 * 2);
+   NoteEntity* addedNote4 = _notesSourceImpl->AddNote(testEntityBody) ;
+   addedNote3->setTimestamp(t + 1200 * 3);
+   time_t beginTime = t;
+   time_t endTime = t + 1200 * 3;
+   _notesSourceImpl->FindByTimeRange(beginTime, endTime);
+   
+   MockDelegate* mock = new MockDelegate();
+   _notesSourceImpl->setDelegate( static_cast< INoteSourceDelegate* >(mock) );
+    EXPECT_CALL( *mock, testSourceDidFoundNotes(true) );
+    
 }
